@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Logs</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      #logs {
+        white-space: pre-wrap;
+        background: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        height: 500px;
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Server Logs</h1>
+    <div id="logs">Connecting to server...</div>
+
+    <script>
+      const logContainer = document.getElementById('logs');
+      const ws = new WebSocket(`ws://${window.location.host}`);
+
+      ws.onopen = () => {
+        logContainer.textContent = 'Connected to server, waiting for logs...';
+      };
+
+      ws.onmessage = (event) => {
+        logContainer.textContent = event.data;
+      };
+
+      ws.onerror = (error) => {
+        logContainer.textContent = 'WebSocket error: ' + error;
+      };
+
+      ws.onclose = () => {
+        logContainer.textContent = 'Disconnected from server';
+      };
+    </script>
+  </body>
+
+</html>
